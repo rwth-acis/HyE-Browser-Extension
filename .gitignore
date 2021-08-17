@@ -1,3 +1,6 @@
+# Config file (avoid accidental password posting)
+server/etc/config.json
+
 # Node
 **/node_modules/*
 
