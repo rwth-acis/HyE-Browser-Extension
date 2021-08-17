@@ -1,0 +1,45 @@
+body{
+  font-family: "arial", "x-locale-body", "sans-serif";
+}
+li{
+  margin: 5px;
+}
+.title{
+  margin: 1em;
+  margin-top: 5px;
+}
+.subtitle{
+  margin: 0.7em;
+  margin-top: 3px;
+  margin-left: 5px;
+}
+.button{
+  border-radius: 0;
+  border-width: 1px;
+  border-style: solid;
+  background-color: #FFF;
+  display: inline-block;
+}
+.button:hover{
+  cursor: pointer;
+  background-color: #DDD;
+}
+#cookieContainer{
+  width: 70%;
+  left: 15%;
+  position: relative;
+}
+#cookieList{
+  list-style-type: none;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #CCC;
+  margin: 5px;
+}
+#tempMsg{
+  margin-left: 5px;
+}
+#upload{
+  font-weight: bold;
+  padding: 0.5em;
+}

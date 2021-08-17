@@ -1,0 +1,7 @@
+{
+  "host": "localhost",
+  "database": "hye",
+  "user": "hye",
+  "password": "secret",
+  "table": "ytCookies"
+}

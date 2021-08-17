@@ -1,0 +1,48 @@
+{
+  "manifest_version": 2,
+  "name": "Hye - YouTube",
+  "version": "0.5",
+  "description": "Allow sharing of YouTube sessions, to diversify recommendations",
+
+  "icons": {
+    "48": "icons/hye_48.png"
+  },
+
+  "permissions": [
+    "http://127.0.0.1/",
+    "https://*.youtube.com/",
+    "cookies",
+    "storage",
+    "webRequest"
+  ],
+
+  "browser_action": {
+    "default_icon": {
+      "16": "icons/hye_16.png",
+      "32": "icons/hye_32.png"
+    }
+  },
+
+  "background": {
+    "scripts": [
+      "youtube/cookies.js"
+    ]
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://*.youtube.com/*"],
+      "js": ["youtube/video.js"]
+    },
+    {
+      "matches": ["http://127.0.0.1/"],
+      "js": ["hye/main.js"]
+    }
+  ],
+
+  "applications": {
+    "gecko": {
+      "id": "hye@Michi03.com"
+    }
+  }
+}
