@@ -1,9 +1,10 @@
 const app = require('express')();
 const path = require('path');
+const bodyParser = require('body-parser');
 const yt = require('./lib/youtube.js');
 const util = require('./lib/util.js');
-const storage = require('./lib/storage.js');
-const bodyParser = require('body-parser');
+const cookies = require('./etc/cookies.json');
+const headers = require('./etc/headers.json');
 
 const YOUTUBE = "https://www.youtube.com/";
 
@@ -13,7 +14,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var host = "127.0.0.1";
 var port = "2201";
 parseArgs(process.argv.slice(2));
-storage.init();
 
 function parseArgs(args) {
     for (let i = 0; i < args.length; ++i)
@@ -59,26 +59,6 @@ app.get('/main/style.css', function(req, res) {
     res.status(200).sendFile(path.join(__dirname, 'style/main.css'));
 })
 
-app.post('/youtube/cookies', async function(req, res) {
-    let cookies = [];
-    let fails = [];
-    if (typeof (cookies = req.body.cookies) === "undefined")
-        res.status(400).send("Missing cookies");
-    for (let i = 0; i < cookies.length; ++i)
-    {
-        let success = await storage.store(cookies[i]);
-        if (success)
-            util.log(`Added cookie ${cookies[i]['name']}`);
-        else
-            fails.push(cookies[i]['name']);
-    }
-    res.setHeader('access-control-allow-origin', 'https://www.youtube.com/');
-    if (fails.length === 0)
-        res.status(200).send("Okay");
-    else
-        res.status(500).send(`Storing failed for cookies ${fails}`);
-})
-
 app.get('/youtube/watch', async function(req, res) {
     if (typeof req.query["v"] === "undefined")
     {
@@ -89,9 +69,18 @@ app.get('/youtube/watch', async function(req, res) {
     util.debug("Handling " + videoId);
     res.setHeader('content-type', 'application/json');
     res.setHeader('access-control-allow-origin', 'https://www.youtube.com/');
-    let cookies = await storage.retrieve();
-    util.debug(cookies);
-    let recommendations = await yt.video(videoId, cookies);
+    // let cookies = await cookies.parseCookies(req.body.cookies);
+    let recommendations = await yt.video(videoId, headers, cookies);
+    util.debug(recommendations);
+    res.send(recommendations);
+})
+
+app.get('/youtube', async function(req, res) {
+    util.debug("Handling main page");
+    res.setHeader('content-type', 'application/json');
+    res.setHeader('access-control-allow-origin', 'https://www.youtube.com/');
+    // let cookies = await cookies.parseCookies(req.body.cookies);
+    let recommendations = await yt.mainPage(headers, cookies);
     util.debug(recommendations);
     res.send(recommendations);
 })
